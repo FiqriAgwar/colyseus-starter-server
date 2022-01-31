@@ -1,14 +1,14 @@
-import { Schema, type } from '@colyseus/schema';
-import { Vector2DSchema } from './Vector';
+import { Schema, type } from "@colyseus/schema";
+import { Vector2DSchema } from "./Vector";
 
 export default class PlayerSchema extends Schema {
-  @type('boolean')
+  @type("boolean")
   isSpawned!: boolean;
 
-  @type('uint16')
+  @type("uint16")
   id!: number;
 
-  @type('number')
+  @type("number")
   angle!: number;
 
   @type(Vector2DSchema)

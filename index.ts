@@ -7,7 +7,8 @@ import express from "express";
 import cors from "cors";
 import BattleRoom from "./src/Room/BattleRoom";
 
-const port = Number(process.env.PORT || 2567) + Number(process.env.NODE_APP_INSTANCE || 0);
+const port =
+  Number(process.env.PORT || 2567) + Number(process.env.NODE_APP_INSTANCE || 0);
 
 const app = express();
 app.use(cors());
@@ -26,19 +27,19 @@ const monitorRouter = monitor({
     "roomId",
     "name",
     "clients",
-    {metadata: "ping"},
+    { metadata: "ping" },
     "locked",
-    "elapsedTime"
-  ]
+    "elapsedTime",
+  ],
 });
 
-app.use('/colyseus', monitorRouter);
+app.use("/colyseus", monitorRouter);
 
-app.get('/ping', (_, res) => {
-  res.status(200).send('pong');
+app.get("/ping", (_, res) => {
+  res.status(200).send("pong");
 });
 
-gameServer.define('battle_room', BattleRoom);
+gameServer.define("battle_room", BattleRoom);
 
 gameServer.listen(port).then(() => {
   console.log(`Running on COLYSEUS port ${port}`);
