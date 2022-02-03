@@ -8,7 +8,7 @@ import cors from "cors";
 import BattleRoom from "./src/Room/BattleRoom";
 
 const port =
-  Number(process.env.PORT || 2567) + Number(process.env.NODE_APP_INSTANCE || 0);
+  Number(process.env.PORT || 3300) + Number(process.env.NODE_APP_INSTANCE || 0);
 
 const app = express();
 app.use(cors());

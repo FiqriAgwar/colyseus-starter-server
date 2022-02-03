@@ -2,6 +2,7 @@ import { Command } from "@colyseus/command";
 import { Room } from "colyseus";
 import BattleRoom from "../Room/BattleRoom";
 import BattleSchema from "../Schema/Battle";
+import CollectibleSchema from "../Schema/Collectible";
 import PlayerSchema from "../Schema/Player";
 import { Vector2DSchema } from "../Schema/Vector";
 
