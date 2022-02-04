@@ -24,6 +24,10 @@ interface Coin {
   coinId: number;
 }
 
+interface Enemy {
+  enemyId: string;
+}
+
 interface WithRoom {
   room: Room;
 }
@@ -62,6 +66,7 @@ export class OnPlayerSpawn extends Command<
 
     player.id = id;
     player.isSpawned = true;
+    player.isAlive = true;
     player.position.assign({ x, y });
   }
 }
@@ -113,5 +118,34 @@ export class OnPlayerCollecting extends Command<BattleRoom, Session & Coin> {
     });
 
     this.room.broadcast("collected", { coinId, nX, nY, id });
+  }
+}
+
+export class OnPlayerCrash extends Command<BattleRoom, Session & Enemy> {
+  execute({ sessionId, enemyId }: Session & Enemy) {
+    const player = this.room.state.players.get(sessionId) as PlayerSchema;
+    if (!player) {
+      return;
+    }
+
+    const playerId = player.id || 0;
+
+    var anotherPlayer: PlayerSchema;
+
+    this.room.state.players.forEach((p) => {
+      if (p.id.toString() == enemyId) {
+        anotherPlayer = p as PlayerSchema;
+      }
+    });
+
+    const anotherPlayerId = anotherPlayer?.id || 0;
+
+    console.log(
+      `Crash has been happened between ${playerId} and ${anotherPlayerId}`
+    );
+
+    player.isAlive = false;
+    anotherPlayer.isAlive = false;
+    this.room.broadcast("crash", { playerId, anotherPlayerId });
   }
 }

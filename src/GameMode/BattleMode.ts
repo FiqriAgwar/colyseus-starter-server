@@ -1,5 +1,6 @@
 import {
   OnPlayerCollecting,
+  OnPlayerCrash,
   OnPlayerMove,
   OnPlayerSpawn,
 } from "../Command/BattleCommand";
@@ -11,6 +12,7 @@ export default class BattleMode {
     this.room.onMessage("spawn", this.OnSpawn.bind(this));
     this.room.onMessage("move", this.OnMove.bind(this));
     this.room.onMessage("collected", this.OnCollecting.bind(this));
+    this.room.onMessage("crash", this.OnCrash.bind(this));
   }
 
   OnSpawn(client: Client, msg: { x: number; y: number; id: number }) {
@@ -30,5 +32,10 @@ export default class BattleMode {
   OnCollecting(client: Client, msg: { coinId: number }) {
     const { sessionId } = client;
     this.dispatcher.dispatch(new OnPlayerCollecting(), { sessionId, ...msg });
+  }
+
+  OnCrash(client: Client, msg: { enemyId: string }) {
+    const { sessionId } = client;
+    this.dispatcher.dispatch(new OnPlayerCrash(), { sessionId, ...msg });
   }
 }

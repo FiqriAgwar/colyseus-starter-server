@@ -5,6 +5,9 @@ export default class PlayerSchema extends Schema {
   @type("boolean")
   isSpawned!: boolean;
 
+  @type("boolean")
+  isAlive!: boolean;
+
   @type("uint16")
   id!: number;
 
