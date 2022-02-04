@@ -20,6 +20,10 @@ interface ID {
   id: number;
 }
 
+interface Coin {
+  coinId: number;
+}
+
 interface WithRoom {
   room: Room;
 }
@@ -28,6 +32,7 @@ export class OnPlayerJoin extends Command<BattleRoom, Session> {
   execute({ sessionId }: Session) {
     const player = new PlayerSchema();
     player.id = 0;
+    player.point = 0;
     this.state.players.set(sessionId, player);
   }
 }
@@ -82,5 +87,31 @@ export class OnPlayerMove extends Command<
     if (angle !== undefined) {
       player.assign({ angle });
     }
+  }
+}
+
+export class OnPlayerCollecting extends Command<BattleRoom, Session & Coin> {
+  execute({ sessionId, coinId }: Session & Coin) {
+    const player = this.room.state.players.get(sessionId) as PlayerSchema;
+    if (!player) {
+      return;
+    }
+
+    const coin = this.room.state.collectibles.get(coinId.toString());
+    if (!coin) {
+      return;
+    }
+
+    player.point += 1;
+    const id = player.id;
+
+    const nX = Math.floor(Math.random() * Math.pow(2, 12)) + 1;
+    const nY = Math.floor(Math.random() * Math.pow(2, 12)) + 1;
+    coin.position.assign({
+      x: nX,
+      y: nY,
+    });
+
+    this.room.broadcast("collected", { coinId, nX, nY, id });
   }
 }
