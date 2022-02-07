@@ -4,6 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "dependencies": {
+    "@colyseus/arena": "^0.14.24",
     "@colyseus/command": "^0.2.1",
     "@colyseus/monitor": "^0.14.22",
     "@types/cors": "^2.8.12",
@@ -25,7 +26,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --config \"./nodemoon.json\"/",
     "build": "tsc",
-    "schema-codegen": "schema-codegen src/Schema/* --ts --output ../colyseus-starter-client/src/Scripts/Schema"
+    "schema-codegen": "schema-codegen src/Schema/* --ts --output ../colyseus-starter-client/src/Scripts/Schema",
+    "start": "nodemon --config \"./nodemoon.json\"/"
   },
   "author": "Aliffiqri Agwar",
   "license": "MIT"
