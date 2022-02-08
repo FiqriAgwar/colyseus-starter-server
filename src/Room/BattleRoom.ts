@@ -13,8 +13,8 @@ export default class BattleRoom extends PingRoom<BattleSchema> {
   onCreate(options: any): void | Promise<any> {
     super.onCreate(options);
     this.startHeartbeat();
-    this.setState(new BattleSchema(500));
-    this.setPatchRate(1000 / 25);
+    this.setState(new BattleSchema(200));
+    this.setPatchRate(1000 / 16);
     this.game = new BattleMode(this, this.dispatcher);
   }
 
