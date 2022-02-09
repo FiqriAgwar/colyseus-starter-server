@@ -17,7 +17,5 @@ export default class CollectibleSchema extends Schema {
     this.position.y = y;
     this.id = id;
     this.isSpawned = true;
-
-    console.log(id, x, y);
   }
 }
