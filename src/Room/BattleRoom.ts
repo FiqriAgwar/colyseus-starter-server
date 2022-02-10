@@ -55,6 +55,7 @@ export default class BattleRoom extends PingRoom<BattleSchema> {
           ) {
             this.dispatcher.dispatch(new OnPlayerHit(), {
               enemyId: id,
+              damage: 10,
             });
 
             b.hit = true;
