@@ -2,6 +2,7 @@ import {
   OnPlayerCollecting,
   OnPlayerCrash,
   OnPlayerMove,
+  OnPlayerShooting,
   OnPlayerSpawn,
 } from "../Command/BattleCommand";
 import { Dispatcher } from "@colyseus/command";
@@ -13,6 +14,7 @@ export default class BattleMode {
     this.room.onMessage("move", this.OnMove.bind(this));
     this.room.onMessage("collected", this.OnCollecting.bind(this));
     this.room.onMessage("crash", this.OnCrash.bind(this));
+    this.room.onMessage("shoot", this.OnShoot.bind(this));
   }
 
   OnSpawn(client: Client, msg: { x: number; y: number; id: number }) {
@@ -37,5 +39,13 @@ export default class BattleMode {
   OnCrash(client: Client, msg: { enemyId: string }) {
     const { sessionId } = client;
     this.dispatcher.dispatch(new OnPlayerCrash(), { sessionId, ...msg });
+  }
+
+  OnShoot(
+    client: Client,
+    msg: { x: number; y: number; angle: number; velocity: number }
+  ) {
+    const { sessionId } = client;
+    this.dispatcher.dispatch(new OnPlayerShooting(), { sessionId, ...msg });
   }
 }

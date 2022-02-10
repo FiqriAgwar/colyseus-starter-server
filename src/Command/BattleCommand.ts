@@ -4,6 +4,7 @@ import BattleRoom from "../Room/BattleRoom";
 import BattleSchema from "../Schema/Battle";
 import CollectibleSchema from "../Schema/Collectible";
 import PlayerSchema from "../Schema/Player";
+import ProjectileSchema from "../Schema/Projectile";
 import { Vector2DSchema } from "../Schema/Vector";
 
 interface Session {
@@ -26,6 +27,15 @@ interface Coin {
 
 interface Enemy {
   enemyId: string;
+}
+
+interface Velocity {
+  velocity: number;
+}
+
+interface BulletCollision {
+  enemyId: string;
+  damage: number;
 }
 
 interface WithRoom {
@@ -147,5 +157,57 @@ export class OnPlayerCrash extends Command<BattleRoom, Session & Enemy> {
     player.isAlive = false;
     anotherPlayer.isAlive = false;
     this.room.broadcast("crash", { playerId, anotherPlayerId });
+  }
+}
+
+export class OnPlayerShooting extends Command<
+  BattleRoom,
+  Session & Transform & Velocity
+> {
+  execute({
+    sessionId,
+    x,
+    y,
+    angle,
+    velocity,
+  }: Session & Transform & Velocity) {
+    const player = this.room.state.players.get(sessionId) as PlayerSchema;
+    if (!player) {
+      return;
+    }
+
+    const bullet = new ProjectileSchema();
+    let n = 1;
+    bullet.position.x = x;
+    bullet.position.y = y;
+    bullet.angle = angle;
+    bullet.shooterId = player.id;
+    bullet.velocity = velocity;
+
+    this.room.state.projectiles.forEach((proj) => {
+      if (proj.shooterId == player.id) {
+        n++;
+      }
+    });
+
+    bullet.id = `${player.id}-${n}`;
+
+    this.room.state.projectiles.set(`${player.id}-${n}`, bullet);
+  }
+}
+
+export class OnPlayerHit extends Command<BattleRoom, BulletCollision> {
+  execute({ enemyId, damage }: BulletCollision) {
+    const player = this.room.state.players.get(enemyId) as PlayerSchema;
+    if (!player) {
+      return;
+    }
+
+    player.health -= damage;
+
+    this.room.broadcast("hit", {
+      playerId: player.id,
+      newHealth: player.health,
+    });
   }
 }
